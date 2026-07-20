@@ -4,6 +4,9 @@ set -e
 # Ensure public storage symlink exists
 php artisan storage:link --force || true
 
+# Run database migrations
+php artisan migrate --force
+
 # Cache configs, routes, and views for production performance
 if [ "$APP_ENV" = "production" ]; then
     php artisan config:cache || true
