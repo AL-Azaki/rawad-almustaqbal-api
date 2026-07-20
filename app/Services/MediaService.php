@@ -83,10 +83,7 @@ class MediaService
                 ];
             } catch (\Exception $e) {
                 Log::error('MediaService Cloudinary Upload Error: ' . $e->getMessage());
-                // In production with Cloudinary enabled, never fall back to ephemeral disk
-                if (config('app.env') === 'production') {
-                    throw new RuntimeException("Cloudinary upload failed: " . $e->getMessage(), 0, $e);
-                }
+                Log::warning('MediaService: Cloudinary upload failed, falling back to local storage.');
             }
         }
 
