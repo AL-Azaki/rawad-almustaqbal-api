@@ -62,4 +62,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/blog', [BlogController::class, 'store']);
     Route::put('/blog/{id}', [BlogController::class, 'update']);
     Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
+
+        Route::get('/cloudinary-test', function () {
+            return [
+            'enabled' => config('features.cloudinary'),
+            'url_exists' => !empty(config('services.cloudinary.url')),
+            'cloud_name' => config('services.cloudinary.cloud_name'),
+            ];        }
+        );
 });

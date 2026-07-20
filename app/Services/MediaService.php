@@ -69,10 +69,7 @@ class MediaService
                 $mime = $file->getMimeType() ?: '';
                 $resourceType = str_starts_with($mime, 'video/') || str_contains($folder, 'videos') ? 'video' : 'auto';
 
-                $upload = (new UploadApi())->upload($file->getRealPath(), [
-                    'folder' => $folder,
-                    'resource_type' => $resourceType,
-                ]);
+                $upload = (new UploadApi())->upload($file->getRealPath());
 
                 return [
                     'secure_url' => $upload['secure_url'] ?? '',
