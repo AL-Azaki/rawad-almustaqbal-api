@@ -7,7 +7,7 @@ services:
     region: frankfurt
     healthCheckPath: /up
     autoDeployTrigger: commit
-    preDeployCommand: php artisan migrate --force
+   # preDeployCommand: php artisan migrate --force
     envVars:
       - key: APP_ENV
         value: production
