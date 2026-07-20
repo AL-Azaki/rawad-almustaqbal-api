@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Services\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class BlogController extends Controller
 {
+    public function __construct(private MediaService $mediaService)
+    {
+    }
     /**
      * Display a listing of published blog posts with optional search and category filter.
      */
@@ -106,8 +109,7 @@ class BlogController extends Controller
         $data = $request->all();
         
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('blog', 'public');
-            $data['image_path'] = Storage::url($path);
+            $data['image_path'] = $this->mediaService->uploadImage($request->file('image'), 'blog');
         }
 
         if (empty($data['published_at']) && ($data['status'] ?? 'published') === 'published') {
@@ -144,8 +146,11 @@ class BlogController extends Controller
         $data = $request->all();
         
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('blog', 'public');
-            $data['image_path'] = Storage::url($path);
+            $newImagePath = $this->mediaService->uploadImage($request->file('image'), 'blog');
+            if ($post->image_path && $post->image_path !== $newImagePath) {
+                $this->mediaService->deleteMedia($post->image_path);
+            }
+            $data['image_path'] = $newImagePath;
         }
 
         $post->update($data);
@@ -162,6 +167,10 @@ class BlogController extends Controller
 
         if (!$post) {
             return response()->json(['message' => 'Blog post not found'], 404);
+        }
+
+        if ($post->image_path) {
+            $this->mediaService->deleteMedia($post->image_path);
         }
 
         $post->delete();

@@ -40,4 +40,15 @@ class BlogPost extends Model
     {
         return $query->where('status', 'published');
     }
+
+    /**
+     * Accessor to ensure image_path always returns a valid absolute or Cloudinary URL.
+     */
+    public function getImagePathAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        return app(\App\Services\MediaService::class)->getPublicUrl($value);
+    }
 }

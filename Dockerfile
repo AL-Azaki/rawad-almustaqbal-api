@@ -57,8 +57,11 @@ RUN composer dump-autoload --optimize \
     && php artisan package:discover --ansi \
     && mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && echo "upload_max_filesize = 50M\npost_max_size = 50M" > $PHP_INI_DIR/conf.d/uploads.ini \
+    && chmod +x entrypoint.sh
 
 EXPOSE 10000
 
+ENTRYPOINT ["/var/www/html/entrypoint.sh"]
 CMD ["apache2-foreground"]
