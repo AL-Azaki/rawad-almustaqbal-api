@@ -18,7 +18,16 @@ class StoreOrderRequest extends FormRequest
             'phone' => ['required', 'string', 'max:20'],
             'location' => ['required', 'string', 'max:255'],
             'service_id' => ['required', 'exists:services,id'],
-            'description' => ['required', 'string'],
+            'description' => ['required', 'string', 'max:3000'],
+            'text' => ['nullable', 'string', 'max:3000'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'description.max' => 'تفاصيل الطلب يجب ألا تتجاوز 3000 حرف',
+            'text.max' => 'تفاصيل الطلب يجب ألا تتجاوز 3000 حرف',
         ];
     }
 }

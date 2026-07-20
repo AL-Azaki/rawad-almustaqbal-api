@@ -26,11 +26,23 @@ class ProjectController extends Controller
         return $this->successPaginated($projects, ProjectResource::class, 'Projects retrieved successfully');
     }
 
+    public function show($idOrSlug)
+    {
+        $project = Project::where('slug', $idOrSlug)
+            ->orWhere('id', is_numeric($idOrSlug) ? $idOrSlug : 0)
+            ->firstOrFail();
+
+        return $this->success(ProjectResource::make($project), 'Project retrieved successfully');
+    }
+
     public function store(StoreProjectRequest $request)
     {
         $project = $this->projectService->createProject(
             $request->validated(),
-            $request->file('image')
+            $request->file('image'),
+            $request->file('before_image'),
+            $request->file('after_image'),
+            $request->file('video')
         );
 
         return $this->success(ProjectResource::make($project), 'Project created successfully', 201);
@@ -43,7 +55,10 @@ class ProjectController extends Controller
         $project = $this->projectService->updateProject(
             $project,
             $request->validated(),
-            $request->file('image')
+            $request->file('image'),
+            $request->file('before_image'),
+            $request->file('after_image'),
+            $request->file('video')
         );
 
         return $this->success(ProjectResource::make($project), 'Project updated successfully');

@@ -14,11 +14,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Admin user
-        User::factory()->create([
-            'name' => 'مدير النظام',
-            'email' => 'admin@abuturki.com',
-            'password' => bcrypt('password'),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@abuturki.com'],
+            [
+                'name' => 'مدير النظام',
+                'password' => bcrypt('password'),
+            ]
+        );
 
         // Services
         $services = [
@@ -148,7 +150,15 @@ class DatabaseSeeder extends Seeder
             'snapchat' => 'https://www.snapchat.com/add/blzky2021',
             'tiktok' => '',
             'theme' => 'light',
-            'language' => 'ar'
+            'language' => 'ar',
+            'googleBusinessName' => 'رواد المستقبل للحلول التقنية',
+            'googleMapsUrl' => 'https://maps.google.com/?cid=1234567890',
+            'googleReviewUrl' => 'https://g.page/r/1234567890/review',
+            'googlePlaceId' => 'ChIJxxxxxxxxxxxx',
+            'googleLatitude' => '21.7583',
+            'googleLongitude' => '39.1417',
+            'googleEnableReviewButton' => '1',
+            'googleEnableUtmTracking' => '1'
         ];
 
         foreach ($settings as $key => $value) {
@@ -195,5 +205,8 @@ class DatabaseSeeder extends Seeder
         foreach ($dummyProjects as $project) {
             \App\Models\Project::create($project);
         }
+
+        $this->call(ProjectCaseStudiesSeeder::class);
+        $this->call(BlogPostsSeeder::class);
     }
 }

@@ -34,6 +34,22 @@ class ServiceController extends Controller
         return $this->successPaginated($services, ServiceResource::class, 'Services retrieved successfully');
     }
 
+    public function show($idOrSlug)
+    {
+        $service = Service::where('status', 'active')
+            ->where(function ($q) use ($idOrSlug) {
+                if (is_numeric($idOrSlug)) {
+                    $q->where('id', $idOrSlug);
+                } else {
+                    $q->where('slug', $idOrSlug)
+                      ->orWhere('title', $idOrSlug);
+                }
+            })
+            ->firstOrFail();
+
+        return $this->success(ServiceResource::make($service), 'Service retrieved successfully');
+    }
+
     public function store(StoreServiceRequest $request)
     {
         $service = $this->serviceService->createService($request->validated());

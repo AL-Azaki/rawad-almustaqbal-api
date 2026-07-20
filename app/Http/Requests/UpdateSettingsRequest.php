@@ -25,6 +25,8 @@ class UpdateSettingsRequest extends FormRequest
                 $rules[$key] = ['nullable', 'url', 'max:255'];
             } elseif ($key === 'theme') {
                 $rules[$key] = ['nullable', 'string', 'in:light,dark'];
+            } elseif (in_array($key, ['googleEnableReviewButton', 'googleEnableUtmTracking'])) {
+                $rules[$key] = ['nullable', 'string', 'in:true,false,1,0'];
             } elseif ($key === 'language') {
                 $rules[$key] = ['nullable', 'string', 'in:ar,en'];
             } else {

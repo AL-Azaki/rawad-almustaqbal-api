@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Api\TestimonialController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\BlogController;
 
 // Deprecated fallback route
 Route::get('/user', [ProfileController::class, 'show'])->middleware('auth:sanctum');
@@ -17,11 +18,15 @@ Route::get('/user', [ProfileController::class, 'show'])->middleware('auth:sanctu
 // Public API Routes (For React Frontend)
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 Route::get('/services', [ServiceController::class, 'index']);
+Route::get('/services/{idOrSlug}', [ServiceController::class, 'show']);
 Route::get('/projects', [ProjectController::class, 'index']);
+Route::get('/projects/{idOrSlug}', [ProjectController::class, 'show']);
 Route::post('/orders', [OrderController::class, 'store'])->middleware('throttle:orders');
 Route::get('/settings', [SettingController::class, 'index']);
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::post('/testimonials', [TestimonialController::class, 'store']);
+Route::get('/blog', [BlogController::class, 'index']);
+Route::get('/blog/{idOrSlug}', [BlogController::class, 'show']);
 
 // Protected API Routes (For Admin Dashboard)
 Route::middleware('auth:sanctum')->group(function () {
@@ -53,4 +58,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/testimonials/{id}', [TestimonialController::class, 'update']);
     Route::patch('/testimonials/{id}/approve', [TestimonialController::class, 'toggleApprove']);
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
+
+    Route::post('/blog', [BlogController::class, 'store']);
+    Route::put('/blog/{id}', [BlogController::class, 'update']);
+    Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
 });

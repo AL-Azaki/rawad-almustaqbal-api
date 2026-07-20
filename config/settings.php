@@ -30,6 +30,14 @@ return [
         'snapchat',
         'tiktok',
         'theme',
-        'language'
+        'language',
+        'googleBusinessName',
+        'googleMapsUrl',
+        'googleReviewUrl',
+        'googlePlaceId',
+        'googleLatitude',
+        'googleLongitude',
+        'googleEnableReviewButton',
+        'googleEnableUtmTracking'
     ],
 ];
